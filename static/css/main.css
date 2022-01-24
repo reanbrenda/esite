@@ -103,7 +103,7 @@ h6 {
 }
 
 header {
-    background: #222;
+    background: red;
     color: #FFF;
     padding: 20px 30px;
 }
@@ -116,6 +116,7 @@ header {
     text-align: center;
     background-image: url('../images/sky.jpg');
     background-size: cover;
+    height: 100%;
 }
 
 .hero-content {
