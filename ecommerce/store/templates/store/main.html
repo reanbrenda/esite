@@ -26,6 +26,10 @@
 	      </li>
 	 
 	    </ul>
+		<form class="d-flex" action="">
+			<input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search" required>
+			<button class="btn btn-outline-success" type="submit">Search</button>
+		  </form>
 	    <div class="form-inline my-2 my-lg-0">
 	     	<a href="{% url 'login' %}" "class="btn btn-warning">Login</a>
 	     	
@@ -33,6 +37,10 @@
 	    		<img  id="cart-icon" src="{% static 'images/cart.png' %}">
 	    	</a>
 	    	<p id="cart-total">{{cartItems}}</p>
+			<form class="d-flex" action="">
+				<input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search" required>
+				<button class="btn btn-outline-success" type="submit">Search</button>
+			  </form>
 
 	    </div>
 	  </div>

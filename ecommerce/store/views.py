@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from django.http import HttpResponse
 import json
@@ -58,7 +58,7 @@ def signup(request):
 			err_msg = "Email is Required."
 		if not err_msg:
 			customer.save()
-			return redirect('home')
+			return redirect('Home')
 		else:
 			return render(request, 'store/signup.html', {'error_msg': err_msg,"values":values})
 	    
