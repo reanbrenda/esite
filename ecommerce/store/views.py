@@ -29,17 +29,27 @@ def signup(request):
 	else:
 		first_name = request.POST.get('firstname')
 		email = request.POST.get('email')
+		phone = request.POST.get('phone')
+		last_name = request.POST.get('lastname')
 		password =request.POST.get('password')
-		customer = Customer(first_name=first_name,email=email, password=password)
-		values = {
-            'firstname': first_name,
-            'email': email,
-        }
+		customer = Customer(first_name=first_name,last_name=last_name,email=email,phone=phone, password=password)
+
+		values={
+			'first_name': first_name ,
+			'last_name': last_name,
+			'email':email,
+			'phone':phone,
+
+		}
 		err_msg = None
 		if not first_name:
-			 err_msg = "First Name Required."
+			err_msg = "First Name Required."
 		elif len(first_name) < 3:
 			err_msg = "First Name must be 3 characters long."
+		elif not last_name:
+			err_msg = "Last Name Required."
+		elif len(last_name) < 3:
+			err_msg = "Last Name must be 3 characters long."
 		elif not phone:
 			err_msg = "Phone is Required."
 		elif len(phone) < 10:
@@ -48,50 +58,13 @@ def signup(request):
 			err_msg = "Email is Required."
 		if not err_msg:
 			customer.save()
-			return HttpResponse("<h3>Signup Successful</h3>")
+			return redirect('home')
 		else:
-			return render(request, 'store/signup.html', {'error_msg': err_msg,'values': values})
+			return render(request, 'store/signup.html', {'error_msg': err_msg,"values":values})
+	    
 def cart(request):
-	data = cartData(request)
-
-	cartItems = data['cartItems']
-	order = data['order']
-	items = data['items']
-
-	context = {'items':items, 'order':order, 'cartItems':cartItems}
-	return render(request, 'store/cart.html', context)
+	return render(request, 'store/cart.html')
 
 def checkout(request):
-	data = cartData(request)
-	
-	cartItems = data['cartItems']
-	order = data['order']
-	items = data['items']
+	return render(request, 'store/checkout.html')
 
-	context = {'items':items, 'order':order, 'cartItems':cartItems}
-	return render(request, 'store/checkout.html', context)
-
-def updateItem(request):
-	data = json.loads(request.body)
-	productId = data['productId']
-	action = data['action']
-	print('Action:', action)
-	print('Product:', productId)
-
-	customer = request.user.customer
-	product = Product.objects.get(id=productId)
-	order, created = Order.objects.get_or_create(customer=customer, complete=False)
-
-	orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)
-
-	if action == 'add':
-		orderItem.quantity = (orderItem.quantity + 1)
-	elif action == 'remove':
-		orderItem.quantity = (orderItem.quantity - 1)
-
-	orderItem.save()
-
-	if orderItem.quantity <= 0:
-		orderItem.delete()
-
-	return JsonResponse('Item was added', safe=False)
